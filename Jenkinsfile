@@ -18,7 +18,8 @@ pipeline {
         }
         stage ('Build and Package') {
             steps {
-                sh 'mvn clean package'                
+                sh 'mvn clean package' 
+                junit testResults: '**/surefire-results/*.xml'               
             }
                 
         }
