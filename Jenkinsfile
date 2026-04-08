@@ -1,27 +1,29 @@
 pipeline {
-    agent { label 'java-build' }
+    agent any
     tools {
-        maven 'maven-3.9.12'
+        maven 'MAVEN_4.0.0'
     }
     options {
-        timeout(time: 1, unit: 'HOURS')
+        timeout (time:1, unit: 'HOURS')
     }
     triggers {
-        pollSCM('* * * * *')
+        pollSCM ('* * * * *')
     }
-    
     stages {
         stage ('SCM') {
             steps {
-                git url: 'https://github.com/AmrutAnkalagi/spring-petclinic-jenkin.git',
-                    branch:'main'
-            }              
+                git url: 'https://github.com/spring-projects/spring-petclinic.git',
+                    branch: 'main'
+            }   
         }
-        stage ('Build') {
+        stage ('Build and Package') {
             steps {
                 sh 'mvn clean package'
+                junit testResults: '**/surefire-reports/*.xml'
             }
+                
         }
+           
 
     }
 }
